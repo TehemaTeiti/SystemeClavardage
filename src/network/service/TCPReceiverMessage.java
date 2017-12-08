@@ -11,7 +11,7 @@ public class TCPReceiverMessage {
         InputStreamReader stream = new InputStreamReader(socket.getInputStream());
         BufferedReader reader = new BufferedReader(stream);
         String message = reader.readLine();
-        incoming.onNewMessage(message);
+        incoming.onNewMessage(socket, message);
         reader.close();
         stream.close();
         socket.close();

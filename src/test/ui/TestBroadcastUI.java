@@ -10,7 +10,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class TestUI {
+public class TestBroadcastUI {
 
     public static final String IP_BROADCAST = "255.255.255.255";
     public static final int PORT = 5001;
