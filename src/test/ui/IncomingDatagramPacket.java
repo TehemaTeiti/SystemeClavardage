@@ -18,7 +18,7 @@ public class IncomingDatagramPacket implements IncomingDatagramPacketListener {
     @Override
     public void onNewDatagramPacket(DatagramPacket packet) {
         InetAddress addr = packet.getAddress();
-        String pseudonyme = new String(packet.getData());
+        String pseudonyme = (new String(packet.getData())).trim();
         System.err.println("Message reçu de " + addr + " : " + pseudonyme);
 
         userTable.put(addr, new User(addr, pseudonyme));
