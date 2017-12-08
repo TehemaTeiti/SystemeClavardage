@@ -7,9 +7,19 @@ import java.net.DatagramSocket;
 public class UDPReceiverMessage {
 
     public static final int BUFFER_SIZE = 30;
+    private int port;
+    private DatagramSocket socket;
 
-    public static void receive(int port, IncomingDatagramPacketListener incoming) throws IOException {
-        DatagramSocket socket = new DatagramSocket(port);
+    public UDPReceiverMessage(int port) {
+        this.port = port;
+    }
+
+    public void close() {
+        socket.close();
+    }
+
+    public void receive(IncomingDatagramPacketListener incoming) throws IOException {
+        socket = new DatagramSocket(port);
         DatagramPacket packet = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
         socket.receive(packet);
         incoming.onNewDatagramPacket(packet);
