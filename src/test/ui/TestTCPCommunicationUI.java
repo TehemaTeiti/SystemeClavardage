@@ -21,7 +21,7 @@ public class TestTCPCommunicationUI {
         System.out.println("Entrer pseudonyme");
         String pseudonyme = sc.nextLine();
 
-        goUDP(pseudonyme);
+        // goUDP(pseudonyme); 10.1.5.72 addresse pour le test
 
         try {
             ThreadTCPServer thServer = startServerTCP(PORT_TCPSERVER, new IncomingMessage());
