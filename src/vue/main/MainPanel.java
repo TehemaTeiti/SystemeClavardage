@@ -23,6 +23,7 @@ public class MainPanel extends JPanel {
         this.add(listUsers);
 
         addUser("Tehema");
+        addUser("Ainol");
     }
 
     public void loadListUsers(Collection<String> users) {
