@@ -21,13 +21,18 @@ public class TestTCPCommunicationUI {
         System.out.println("Entrer pseudonyme");
         String pseudonyme = sc.nextLine();
 
-        // goUDP(pseudonyme); 10.1.5.72 addresse pour le test
+        // goUDP(pseudonyme); démarrage de la partie UDP 10.1.5.88
 
         try {
+            // Création du serveur TCP
             ThreadTCPServer thServer = startServerTCP(PORT_TCPSERVER, new IncomingMessage());
+
+            // Envoi des messages TCP à un destinataire
             System.out.println("Entrer @ destinataire");
             String addr = sc.nextLine();
             askCommunication(InetAddress.getByName(addr), PORT_TCPSERVER);
+
+            // Arrete du programme
             thServer.interrupt();
             System.out.println("Arrêt du programme");
 

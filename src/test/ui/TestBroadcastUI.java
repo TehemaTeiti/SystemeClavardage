@@ -23,12 +23,14 @@ public class TestBroadcastUI {
         String pseudo = sc.nextLine();
 
         try {
+            // Envoi UDP Broadcast
             InetAddress addr = InetAddress.getByName(IP_BROADCAST);
             RunnableUDPSender sender = new RunnableUDPSender(addr, PORT, pseudo, PERIOD_BROADCAST);
             ThreadUDPSender thSender = new ThreadUDPSender(sender);
             thSender.start();
             System.out.println("Démarrage de l'envoi broadcast");
 
+            // Ecoute UDP
             UserTable userTable = new UserTable();
             IncomingDatagramPacket incoming = new IncomingDatagramPacket(userTable);
             RunnableUDPReceiver receiver = new RunnableUDPReceiver(PORT, incoming);
@@ -36,6 +38,7 @@ public class TestBroadcastUI {
             thReceiver.start();
             System.out.println("Démarrage de l'écoute UDP sur le port " + PORT);
 
+            // Arret du programme
             System.out.println("Appuyez sur entrée pour arrêter le programme");
             sc.nextLine();
             thSender.interrupt();
