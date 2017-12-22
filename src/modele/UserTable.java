@@ -1,6 +1,7 @@
 package modele;
 
 import java.net.InetAddress;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class UserTable {
@@ -15,7 +16,13 @@ public class UserTable {
         userTable.put(addr, u);
     }
 
+    public Collection<User> getUsers() {
+        return userTable.values();
+    }
 
+    public User getUser(InetAddress addr) {
+        return userTable.get(addr);
+    }
 
     @Override
     public String toString() {

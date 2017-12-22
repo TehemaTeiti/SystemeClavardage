@@ -29,7 +29,7 @@ public class TestTCPCommunicationUI {
 
             // Envoi des messages TCP à un destinataire
             System.out.println("Entrer @ destinataire");
-            String addr = sc.nextLine();
+            String addr = sc.nextLine(); // choix du destinataire
             askCommunication(InetAddress.getByName(addr), PORT_TCPSERVER);
 
             // Arrete du programme

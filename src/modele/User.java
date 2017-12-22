@@ -13,6 +13,10 @@ public class User {
         this.pseudonyme = pseudonyme;
     }
 
+    public User(String addr, String pseudonyme) throws UnknownHostException {
+        this(InetAddress.getByName(addr), pseudonyme);
+    }
+
     @Override
     public String toString() {
         return "IP : " + addr + ", pseudo : " + pseudonyme;
