@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 
 public class User {
 
-    private InetAddress addr;
+    public InetAddress addr;
     public String pseudonyme;
 
     public User(InetAddress addr, String pseudonyme) {
@@ -18,8 +18,21 @@ public class User {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (obj instanceof User) {
+            User u = (User) obj;
+            return (u.pseudonyme.equals(this.pseudonyme) && u.addr.equals(this.addr));
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
     public String toString() {
-        return "IP : " + addr + ", pseudo : " + pseudonyme;
+        return addr.getHostAddress() + " " + pseudonyme;
     }
 
 }

@@ -1,4 +1,4 @@
-package test.ui;
+package ui;
 
 import network.service.IncomingMessageListener;
 

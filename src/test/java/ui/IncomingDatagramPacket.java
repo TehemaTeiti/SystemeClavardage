@@ -1,4 +1,4 @@
-package test.ui;
+package ui;
 
 import modele.User;
 import modele.UserTable;
@@ -18,10 +18,11 @@ public class IncomingDatagramPacket implements IncomingDatagramPacketListener {
     @Override
     public void onNewDatagramPacket(DatagramPacket packet) {
         InetAddress addr = packet.getAddress();
-        String pseudonyme = (new String(packet.getData())).trim();
-        System.err.println("Message reçu de " + addr + " : " + pseudonyme);
+        String data = (new String(packet.getData())).trim();
 
-        userTable.put(addr, new User(addr, pseudonyme));
+        System.err.println("Message reçu de " + addr + " : " + data);
+
+        userTable.put(addr, new User(addr,data));
         System.out.println(userTable.toString());
     }
 }

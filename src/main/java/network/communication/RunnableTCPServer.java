@@ -22,12 +22,11 @@ public class RunnableTCPServer implements Runnable {
 
     public void stop() throws IOException {
         stop = true;
-        server.close();
     }
 
     @Override
     public void run() {
-        Socket socket;
+        Socket socket = null;
         ThreadTCPReceiver thReceiver;
         RunnableTCPReceiver receiver;
         while(!stop) {
@@ -40,5 +39,13 @@ public class RunnableTCPServer implements Runnable {
                 e.printStackTrace();
             }
         }
+
+        // fermeture de la socket
+        if (socket != null)
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 }

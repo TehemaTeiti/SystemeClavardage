@@ -16,8 +16,4 @@ public class TCPServer  {
     public Socket accept() throws IOException {
         return serverSocket.accept();
     }
-
-    public void close() throws IOException {
-        serverSocket.close();
-    }
 }
