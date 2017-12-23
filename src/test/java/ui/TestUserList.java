@@ -91,7 +91,6 @@ public class TestUserList {
     }
 
 
-
     private String standardOutput() {
         return out.toString();
     }

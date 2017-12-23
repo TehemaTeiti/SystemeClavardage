@@ -16,6 +16,11 @@ public class ChooseUserPresenter implements ChooseUserListener {
     private ChooseUserView view;
     private UserList users;
     private String currentPseudo;
+    private ThreadUDPSender thUDPSender;
+    private ThreadUDPReceiver thUdpReceiver;
+    private ThreadTCPServer threadTCPServer;
+    private IncomingMessage incoming;
+
 
     public ChooseUserPresenter(String currentPseudo) {
             this.currentPseudo = currentPseudo;
@@ -32,34 +37,42 @@ public class ChooseUserPresenter implements ChooseUserListener {
         try {
             // Ecoute du serveur UDP
             System.out.println("Connexion en tant que " + currentPseudo); // TODO debug
-            startUDPServer();
+            startTCPServer(App_Param_Network.PORT_TCP_SERVER);
+            startUDPServer(App_Param_Network.PORT_UDP_SERVER);
             startUDPSender(currentPseudo);
-            //startTCPServer();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            closeThreads();
         }
     }
 
-    private void startTCPServer() throws IOException {
-        RunnableTCPServer tcpServer = new RunnableTCPServer(App_Param_Network.PORT_TCP_SERVER, new IncomingMessage());
+    public void closeThreads() {
+        threadTCPServer.interrupt();
+        thUdpReceiver.interrupt();
     }
 
-    private void startUDPSender(String currentPseudo) throws UnknownHostException {
+    private void startTCPServer(int port) throws IOException {
+        incoming = new IncomingMessage();
+        RunnableTCPServer tcpServer = new RunnableTCPServer(port, incoming);
+        threadTCPServer = new ThreadTCPServer(tcpServer);
+        threadTCPServer.start();
+        System.out.println("Ecoute TCP Serveur sur le port " + port);
+    }
+
+    private void startUDPSender(String message) throws UnknownHostException {
         InetAddress ipBroadcast = InetAddress.getByName(App_Param_Network.IP_BORADCAST);
         int portUdpServer = App_Param_Network.PORT_UDP_SERVER;
         int periodUdpBroadcast = App_Param_Network.PERIOD_UDP_BROADCAST;
 
-        RunnableUDPSender udpSender = new RunnableUDPSender(ipBroadcast, portUdpServer, currentPseudo, periodUdpBroadcast);
-        ThreadUDPSender thUDPSender = new ThreadUDPSender(udpSender);
+        RunnableUDPSender udpSender = new RunnableUDPSender(ipBroadcast, portUdpServer, message, periodUdpBroadcast);
+        thUDPSender = new ThreadUDPSender(udpSender);
         thUDPSender.start();
     }
 
-    private void startUDPServer() {
-        int portUdpServer = App_Param_Network.PORT_UDP_SERVER;
+    private void startUDPServer(int portUdpServer) {
         IncomingDatagramPacket incoming = new IncomingDatagramPacket(this);
 
         RunnableUDPReceiver udpReceiver = new RunnableUDPReceiver(portUdpServer, incoming);
-        ThreadUDPReceiver thUdpReceiver = new ThreadUDPReceiver(udpReceiver);
+        thUdpReceiver = new ThreadUDPReceiver(udpReceiver);
         thUdpReceiver.start();
         System.out.println("Ecoute UDP sur le port " + portUdpServer); // TODO debug
     }
@@ -82,7 +95,7 @@ public class ChooseUserPresenter implements ChooseUserListener {
         System.out.println("Démarrage du chat avec " + user.pseudonyme + "\taddr : " + user.addr);
 
         // TODO lancer fenêtre de chat avec utilisateur sélectionné
-        ChatPresenter chatPresenter = new ChatPresenter(currentPseudo, user);
+        ChatPresenter chatPresenter = new ChatPresenter(currentPseudo, user, incoming);
         ChatFrame chatFrame = new ChatFrame(chatPresenter, user.pseudonyme);
         chatPresenter.setView(chatFrame);
     }
