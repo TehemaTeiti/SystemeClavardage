@@ -16,5 +16,6 @@ public class LoginPresenter implements LoginListener {
         view.dispose();
         ChooseUserPresenter presenter = new ChooseUserPresenter(text);
         ChooseUserView view = new ChooseUserFrame(presenter);
+        presenter.setView(view);
     }
 }

@@ -1,29 +1,24 @@
 package gui.view;
 
 import gui.presenter.ChooseUserView;
-import modele.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class ChooseUserFrame extends JFrame implements ChooseUserView {
 
     public static final String TITLE = "Systeme Clavardage";
     private DefaultListModel<String> listModelUser;
+    private final JList<String> listUsers;
 
     public ChooseUserFrame(ChooseUserListener presenter) {
         super(TITLE);
         setSize(800,300);
 
         // création des composants
-
         JLabel labelChooseUser = new JLabel("Liste des utilisateurs connectés");
 
-        listModelUser = new DefaultListModel<>();
-        JList<String> listUsers = new JList<>(listModelUser);
-        listUsers.setLayoutOrientation(JList.VERTICAL);
-        listUsers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listUsers = buildList();
 
         JButton bOk = new JButton("Chat");
         bOk.addActionListener(e -> presenter.startChat(listUsers.getSelectedIndex()));
@@ -39,16 +34,23 @@ public class ChooseUserFrame extends JFrame implements ChooseUserView {
         display();
     }
 
+    private JList<String> buildList() {
+        listModelUser = new DefaultListModel<>();
+        JList<String> listUsers = new JList<>(listModelUser);
+        listUsers.setLayoutOrientation(JList.VERTICAL);
+        listUsers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        return listUsers;
+    }
+
     public void display() {
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
     @Override
-    public void displayUsers(List<String> listText) {
-        listModelUser.clear();
-        for (String text : listText) {
-            listModelUser.addElement(text);
-        }
+    public void addUser(String pseudo) {
+        listModelUser.addElement(pseudo);
+        if (listUsers.isSelectionEmpty())
+            listUsers.setSelectedIndex(0);
     }
 }
